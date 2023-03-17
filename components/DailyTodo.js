@@ -8,7 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
-  const [todos, handleDeleteTodo] = useContext(TodosContext);
+  // eslint-disable-next-line no-unused-vars
+  const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
   const [index, setIndex] = useState(null);
   const [completed, setCompleted] = useState(false);
 
