@@ -13,6 +13,7 @@ function DailyTodo() {
 
   useEffect(() => {
     console.log('in dailyTodo useEffect, todos: ', todos);
+    console.log(new Date().getTime());
     const getInitialIndex = async () => {
       const midnight = new Date();
       midnight.setHours(24, 0, 0, 0);
@@ -23,9 +24,11 @@ function DailyTodo() {
       if (
         storedIndex !== null &&
         storedTimestamp !== null &&
+        index !== 0 &&
         Number(storedTimestamp) > new Date().getTime()
       ) {
         setIndex(Number(storedIndex));
+        console.log('in getInitialIndex, setIndex: ', Number(storedIndex));
         setCompleted(false);
       } else if (todos && todos.length > 0) {
         // check if todos is not empty
@@ -50,11 +53,19 @@ function DailyTodo() {
 
   const handleDeleteTodoPress = () => {
     handleDeleteTodo(index);
+    if (index === todos.length - 1) {
+      console.log('in handleDeleteTodoPress, index === todos.length');
+      // If the deleted todo was the last one in the list,
+      // set the index to the new last todo in the list
+      setIndex(0);
+    }
   };
 
   const handleCompleteTodoPress = () => {
+    console.log('in handleCompleteTodoPress');
     handleDeleteTodo(index);
     setCompleted(true);
+    console.log('completed: ', completed);
   };
 
   return (
@@ -63,7 +74,7 @@ function DailyTodo() {
         <Text>Add a todo in the Input page</Text>
       ) : index !== null ? (
         <>
-          {completed ? (
+          {completed === true ? (
             <Text>Congratulations! You did something today.</Text>
           ) : (
             <>
