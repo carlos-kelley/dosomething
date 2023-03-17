@@ -31,5 +31,3 @@ Before you get started, make sure you have the following software installed on y
 4. Run the app with the command:
    ```sh
    npm start
-  ```
-
