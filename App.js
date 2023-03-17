@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DailyScreen from './screens/DailyScreen';
@@ -11,6 +11,20 @@ const RootStack = createStackNavigator();
 
 const App = () => {
   const [todos, setTodos] = useState({ list: [] });
+
+  useEffect(() => {
+    async function loadTodos() {
+      try {
+        const storedTodos = await AsyncStorage.getItem('todos');
+        if (storedTodos !== null) {
+          setTodos(JSON.parse(storedTodos));
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    loadTodos();
+  }, []);
 
   const handleDeleteTodo = (index) => {
     const newTodos = [...todos];

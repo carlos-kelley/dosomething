@@ -7,7 +7,7 @@ import DeleteButton from './DeleteButton';
 function DailyTodo() {
   const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
   const [dayOfYear, setDayOfYear] = useState(0);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(null);
 
   // // This effect runs once per day only if there is at least one todo
 
@@ -21,7 +21,8 @@ function DailyTodo() {
     // Set the index to a random number based on the current day of the year
     if (newDayOfYear !== dayOfYear && todos.length > 0) {
       const newIndex =
-        (Math.floor(Math.random() * todos.length) + dayOfYear) % todos.length;
+        (Math.floor(Math.random() * todos.length) + newDayOfYear) %
+        todos.length;
       setIndex(newIndex);
       setDayOfYear(newDayOfYear);
     }
@@ -35,12 +36,12 @@ function DailyTodo() {
     <>
       {todos && todos.length === 0 ? (
         <Text>Add a todo in the Input page</Text>
-      ) : (
+      ) : index !== null ? (
         <>
           <Text>{todos[index]}</Text>
           <DeleteButton onPress={handleDeleteTodoPress} />
         </>
-      )}
+      ) : null}
     </>
   );
 }
