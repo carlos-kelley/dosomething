@@ -14,11 +14,19 @@ Before you get started, make sure you have the following software installed on y
 
 ## Installation
 
-1. Install dependencies by running:
+1. Clone the repo: 
+   ```sh
+   git clone https://github.com/carlos-kelley/dosomething.git
+   ```
+2. Navigate to the project directory: 
+   ```sh
+   cd dosomething
+   ```
+3. Install dependencies by running:
    ```sh
    npm install
    ```
-2. Run the app with the command:
+4. Run the app with the command:
    ```sh
    npm start
   ```
