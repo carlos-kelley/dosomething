@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text } from 'react-native';
 import { TodosContext } from './TodosContext';
+import DeleteButton from './DeleteButton';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
@@ -26,13 +27,23 @@ function DailyTodo() {
     }
   }, [todos, dayOfYear]);
 
+  const handleDeleteTodo = () => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
   return (
-    // if there are no todos, say "Add a todo in the Input page
-    <Text>
-      {todos && todos.length === 0
-        ? 'Add a todo in the Input page'
-        : todos[index]}
-    </Text>
+    <>
+      {todos && todos.length === 0 ? (
+        <Text>Add a todo in the Input page</Text>
+      ) : (
+        <>
+          <Text>{todos[index]}</Text>
+          <DeleteButton onPress={handleDeleteTodo} />
+        </>
+      )}
+    </>
   );
 }
 

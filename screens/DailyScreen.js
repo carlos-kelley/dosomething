@@ -11,8 +11,7 @@ const DailyScreen = () => {
   return (
     <SafeAreaView>
       <InputNavButton />
-      <DailyTodo todos={todos} />
-      <DeleteButton />
+      <DailyTodo todos={todos.list} />
       <CompleteButton />
     </SafeAreaView>
   );

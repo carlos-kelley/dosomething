@@ -1,15 +1,11 @@
 //button which deletes a todo on click
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const DeleteButton = ({ todo, todos, setTodos }) => {
-  const handleDeleteTodo = () => {
-    setTodos(todos.filter((t) => t !== todo));
-  };
-
+const DeleteButton = ({ onPress }) => {
   return (
-    <TouchableOpacity onPress={handleDeleteTodo}>
+    <TouchableOpacity onPress={onPress}>
       <Text>Delete</Text>
     </TouchableOpacity>
   );
