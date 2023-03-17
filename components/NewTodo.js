@@ -1,11 +1,24 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { SafeAreaView, Text, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodosContext } from './TodosContext';
 
 const STORAGE_KEY = 'todos';
+
+// const DismissKeyboard = ({ children }) => (
+//   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+//     {children}
+//   </TouchableWithoutFeedback>
+// );
 
 const NewTodo = () => {
   // This variable holds the user's input
@@ -51,27 +64,33 @@ const NewTodo = () => {
   };
 
   return (
-    <SafeAreaView>
-      <Text>What do you want to do today?</Text>
-      {/* input todos*/}
-      <TextInput
-        maxLength={30}
-        placeholder="Enter here"
-        onChangeText={setNewTodo}
-        value={newTodo}
-      />
-      {/* button that adds to todos */}
-      <TouchableOpacity title="Add" onPress={handleAddTodo}>
-        <Text>Add{'\n'}</Text>
-        {/* if handleAddTodo worked, write that it worked */}
-        {isAddTodoSuccess && <Text>Added!</Text>}
-        <FlatList
-          data={todos}
-          renderItem={({ item }) => <Text>{item}</Text>}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </TouchableOpacity>
-    </SafeAreaView>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView>
+        <View style={{ height: '100%' }}>
+          <View>
+            <Text>What do you want to do today?</Text>
+          </View>
+          {/* input todos*/}
+          <View>
+            <TextInput
+              maxLength={30}
+              returnKeyType="done"
+              onSubmitEditing={handleAddTodo}
+              blurOnSubmit={false}
+              placeholder="Enter here"
+              onChangeText={setNewTodo}
+              value={newTodo}
+            />
+          </View>
+
+          {isAddTodoSuccess && (
+            <View>
+              <Text>Added!</Text>
+            </View>
+          )}
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
