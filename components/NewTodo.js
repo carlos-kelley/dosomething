@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import {
@@ -98,6 +99,7 @@ const NewTodo = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView>
+        {/* eslint-disable-next-line react-native/no-inline-styles */}
         <View style={{ height: '100%' }}>
           <View>
             <TouchableOpacity
