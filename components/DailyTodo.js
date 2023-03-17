@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
 import CompleteButton from './CompleteButton';
@@ -10,6 +10,40 @@ function DailyTodo() {
   const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
   const [index, setIndex] = useState(null);
   const [completed, setCompleted] = useState(false);
+
+  const logAsyncStorage = async () => {
+    const storedIndex = await AsyncStorage.getItem('index');
+    const storedTimestamp = await AsyncStorage.getItem('timestamp');
+    const storedCompleted = await AsyncStorage.getItem('completed');
+    console.log('storedIndex: ', storedIndex);
+    console.log('storedTimestamp: ', storedTimestamp);
+    console.log('storedCompleted: ', storedCompleted);
+  };
+
+  useEffect(() => {
+    console.log('in completed useEffect, completed is:', completed);
+    async function fetchCompleted() {
+      try {
+        const storedCompleted = await AsyncStorage.getItem('completed');
+        if (storedCompleted === 'true') {
+          console.log(
+            'in true completed useEffect, stored is:',
+            storedCompleted,
+          );
+          setCompleted(true);
+        } else {
+          console.log(
+            'in false completed useEffect, stored is:',
+            storedCompleted,
+          );
+          setCompleted(false);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchCompleted();
+  }, [completed]);
 
   useEffect(() => {
     console.log('in dailyTodo useEffect, todos: ', todos);
@@ -29,7 +63,7 @@ function DailyTodo() {
       ) {
         setIndex(Number(storedIndex));
         console.log('in getInitialIndex, setIndex: ', Number(storedIndex));
-        setCompleted(false);
+        console.log('in getInitialIndex, setCompleted: ', completed);
       } else if (todos && todos.length > 0) {
         // check if todos is not empty
         const newIndex = Math.floor(Math.random() * todos.length);
@@ -39,6 +73,7 @@ function DailyTodo() {
         setCompleted(false);
         await AsyncStorage.setItem('index', newIndex.toString());
         await AsyncStorage.setItem('timestamp', timestamp.toString());
+        await AsyncStorage.setItem('completed', 'false');
       }
     };
 
@@ -61,10 +96,16 @@ function DailyTodo() {
     }
   };
 
-  const handleCompleteTodoPress = () => {
+  const handleCompleteTodoPress = async () => {
     console.log('in handleCompleteTodoPress');
     handleDeleteTodo(index);
     setCompleted(true);
+    console.log('completed: ', completed);
+    await AsyncStorage.setItem('completed', 'true');
+    logAsyncStorage();
+  };
+
+  const logCompleted = () => {
     console.log('completed: ', completed);
   };
 
@@ -75,10 +116,20 @@ function DailyTodo() {
       ) : index !== null ? (
         <>
           {completed === true ? (
-            <Text>Congratulations! You did something today.</Text>
+            <>
+              <Text>Congratulations! You did something meaningful today.</Text>
+
+              <Text>See you tomorrow!</Text>
+            </>
           ) : (
             <>
-              <Text>Index: {index}</Text>
+              {/* <TouchableOpacity onPress={logCompleted}>
+                <Text>Log Completed</Text>
+              </TouchableOpacity> */}
+              {/* <TouchableOpacity onPress={logAsyncStorage}>
+                <Text>Log AsyncStorage</Text>
+              </TouchableOpacity> */}
+              {/* <Text>Index: {index}</Text> */}
               <Text>{todos[index]}</Text>
               <DeleteButton title="Delete" onPress={handleDeleteTodoPress} />
               <CompleteButton

@@ -34,7 +34,8 @@ const NewTodo = () => {
         } else if (storedTodos !== null) {
           setTodos(JSON.parse(storedTodos));
           console.log(
-            'in NewTodo loadTodos, setTodos(JSON.parse(storedTodos), storedTodos: ', storedTodos
+            'in NewTodo loadTodos, setTodos(JSON.parse(storedTodos), storedTodos: ',
+            storedTodos,
           );
         }
       } catch (e) {
@@ -117,7 +118,7 @@ const NewTodo = () => {
               returnKeyType="done"
               onSubmitEditing={handleAddTodo}
               blurOnSubmit={false}
-              placeholder="Enter here"
+              placeholder="Add all the things you've been meaning to do!"
               onChangeText={setNewTodo}
               value={newTodo}
             />
