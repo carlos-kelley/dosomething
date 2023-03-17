@@ -11,14 +11,9 @@ const DailyScreen = () => {
   return (
     <SafeAreaView>
       <InputNavButton />
-      {/* <DailyTodo todos={todos.list} /> */}
+      <DailyTodo todos={todos} />
       <DeleteButton />
       <CompleteButton />
-      <FlatList
-        data={todos.list}
-        renderItem={({ item }) => <Text>{item}</Text>}
-        keyExtractor={(item, index) => index.toString()}
-      />
     </SafeAreaView>
   );
 };
