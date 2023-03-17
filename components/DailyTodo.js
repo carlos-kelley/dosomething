@@ -45,7 +45,7 @@ function DailyTodo() {
       }
     }
     fetchCompleted();
-  }, [completed]);
+  });
 
   useEffect(() => {
     console.log('in dailyTodo useEffect, todos: ', todos);
