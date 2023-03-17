@@ -108,9 +108,6 @@ const NewTodo = () => {
               <Text>Clear AsyncStorage</Text>
             </TouchableOpacity>
           </View>
-          <View>
-            <Text>What do you want to do today?</Text>
-          </View>
           {/* input todos*/}
           <View>
             <TextInput
@@ -122,6 +119,12 @@ const NewTodo = () => {
               onChangeText={setNewTodo}
               value={newTodo}
             />
+          </View>
+          {/* add todos button */}
+          <View>
+            <TouchableOpacity onPress={handleAddTodo}>
+              <Text>Add</Text>
+            </TouchableOpacity>
           </View>
 
           {isAddTodoSuccess && (
