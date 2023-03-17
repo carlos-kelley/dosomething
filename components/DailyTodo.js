@@ -8,29 +8,73 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
   const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
-  const [dayOfYear, setDayOfYear] = useState(0);
   const [index, setIndex] = useState(null);
   const [completed, setCompleted] = useState(false);
 
-  // // This effect runs once per day only if there is at least one todo
-
   useEffect(() => {
-    // Get the current day of the year (between 1 and 365)
-    const newDayOfYear = Math.floor(
-      (Date.now() - new Date().setFullYear(new Date().getFullYear(), 0, 0)) /
-        86400000,
-    );
+    const getInitialIndex = async () => {
+      const midnight = new Date();
+      midnight.setHours(24, 0, 0, 0);
+      const timestamp = midnight.getTime();
+      const storedIndex = await AsyncStorage.getItem('index');
+      const storedTimestamp = await AsyncStorage.getItem('timestamp');
 
-    // Set the index to a random number based on the current day of the year
-    if (newDayOfYear !== dayOfYear && todos.length > 0) {
-      const newIndex =
-        (Math.floor(Math.random() * todos.length) + newDayOfYear) %
-        todos.length;
-      setIndex(newIndex);
-      setDayOfYear(newDayOfYear);
-      setCompleted(false);
-    }
-  }, [todos, dayOfYear]);
+      if (
+        storedIndex !== null &&
+        storedTimestamp !== null &&
+        Number(storedTimestamp) > new Date().getTime()
+      ) {
+        setIndex(Number(storedIndex));
+        setCompleted(false);
+      } else {
+        const newIndex = Math.floor(Math.random() * todos.length);
+        setIndex(newIndex);
+        setCompleted(false);
+        await AsyncStorage.setItem('index', newIndex.toString());
+        await AsyncStorage.setItem('timestamp', timestamp.toString());
+      }
+    };
+
+    getInitialIndex(); // Call getInitialIndex immediately on component mount
+
+    const intervalId = setInterval(() => {
+      getInitialIndex();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [todos]);
+  useEffect(() => {
+    const getInitialIndex = async () => {
+      const midnight = new Date();
+      midnight.setHours(24, 0, 0, 0);
+      const timestamp = midnight.getTime();
+      const storedIndex = await AsyncStorage.getItem('index');
+      const storedTimestamp = await AsyncStorage.getItem('timestamp');
+
+      if (
+        storedIndex !== null &&
+        storedTimestamp !== null &&
+        Number(storedTimestamp) > new Date().getTime()
+      ) {
+        setIndex(Number(storedIndex));
+        setCompleted(false);
+      } else {
+        const newIndex = Math.floor(Math.random() * todos.length);
+        setIndex(newIndex);
+        setCompleted(false);
+        await AsyncStorage.setItem('index', newIndex.toString());
+        await AsyncStorage.setItem('timestamp', timestamp.toString());
+      }
+    };
+
+    getInitialIndex(); // Call getInitialIndex immediately on component mount
+
+    const intervalId = setInterval(() => {
+      getInitialIndex();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [todos]);
 
   const handleDeleteTodoPress = () => {
     handleDeleteTodo(index);
@@ -52,7 +96,6 @@ function DailyTodo() {
           ) : (
             <>
               <Text>{todos[index]}</Text>
-              <Text>Index is {index}</Text>
               <DeleteButton title="Delete" onPress={handleDeleteTodoPress} />
               <CompleteButton
                 title="Complete"
@@ -61,7 +104,9 @@ function DailyTodo() {
             </>
           )}
         </>
-      ) : null}
+      ) : (
+        <Text>Nope</Text>
+      )}
     </>
   );
 }
