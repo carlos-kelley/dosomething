@@ -9,7 +9,7 @@ const DailyScreen = () => {
   return (
     <SafeAreaView>
       <InputNavButton />
-      <DailyTodo todos={todos.list} />
+      <DailyTodo todos={todos} />
     </SafeAreaView>
   );
 };

@@ -10,15 +10,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const RootStack = createStackNavigator();
 
 const App = () => {
-  const [todos, setTodos] = useState({ list: [] });
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
+    console.log('in App useEffect, todos: ', todos);
     async function loadTodos() {
       try {
         const storedTodos = await AsyncStorage.getItem('todos');
-        if (storedTodos !== null) {
-          setTodos(JSON.parse(storedTodos));
-        }
+        setTodos(JSON.parse(storedTodos));
       } catch (e) {
         console.log(e);
       }

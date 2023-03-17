@@ -7,7 +7,7 @@ const InputScreen = () => {
   const [todos, setTodos] = useContext(TodosContext);
   return (
     <SafeAreaView>
-      <NewTodo todos={todos.list} />
+      <NewTodo todos={todos} />
     </SafeAreaView>
   );
 };

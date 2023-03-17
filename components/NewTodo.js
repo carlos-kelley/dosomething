@@ -8,17 +8,11 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodosContext } from './TodosContext';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const STORAGE_KEY = 'todos';
-
-// const DismissKeyboard = ({ children }) => (
-//   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-//     {children}
-//   </TouchableWithoutFeedback>
-// );
 
 const NewTodo = () => {
   // This variable holds the user's input
@@ -28,16 +22,26 @@ const NewTodo = () => {
 
   // Load todos from AsyncStorage on component mount
   useEffect(() => {
+    console.log('in NewTodo useEffect, todos: ', todos);
+
     async function loadTodos() {
       try {
         const storedTodos = await AsyncStorage.getItem(STORAGE_KEY);
-        if (storedTodos !== null) {
+        console.log('in NewTodo loadTodos, storedTodos: ', storedTodos);
+        if (storedTodos === null) {
+          setTodos([]);
+          console.log('in NewTodo loadTodos, setTodos([])');
+        } else if (storedTodos !== null) {
           setTodos(JSON.parse(storedTodos));
+          console.log(
+            'in NewTodo loadTodos, setTodos(JSON.parse(storedTodos), storedTodos: ', storedTodos
+          );
         }
       } catch (e) {
         console.log(e);
       }
     }
+
     loadTodos();
   }, []);
 
@@ -53,13 +57,40 @@ const NewTodo = () => {
     saveTodos();
   }, [todos]);
 
+  async function logAsyncStorage() {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const items = await AsyncStorage.multiGet(keys);
+
+      console.log('AsyncStorage contents:');
+      items.forEach((item) => {
+        console.log(`${item[0]}: ${item[1]}`);
+      });
+    } catch (error) {
+      console.log('Error logging AsyncStorage:', error);
+    }
+  }
+  async function clearAsyncStorage() {
+    try {
+      await AsyncStorage.clear();
+      logAsyncStorage();
+    } catch (error) {
+      console.log('Error clearing AsyncStorage:', error);
+    }
+  }
+
   // This function adds the new todo to the list of todos
   const handleAddTodo = () => {
+    logAsyncStorage();
+    console.log('in handleAddTodo, newTodo: ', newTodo);
     if (newTodo.trim() !== '') {
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
+      console.log('in handleAddTodo, todos is ', todos);
+      setTodos([...todos, newTodo]);
       setNewTodo('');
+      console.log('newTodo is now ', newTodo);
       setIsAddTodoSuccess(true);
-      setTimeout(() => setIsAddTodoSuccess(false), 1500); // Set isAddTodoSuccess to false after 3 seconds
+      setTimeout(() => setIsAddTodoSuccess(false), 1500);
+      // Set isAddTodoSuccess to false after 3 seconds
     }
   };
 
@@ -67,6 +98,15 @@ const NewTodo = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView>
         <View style={{ height: '100%' }}>
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                clearAsyncStorage();
+              }}
+            >
+              <Text>Clear AsyncStorage</Text>
+            </TouchableOpacity>
+          </View>
           <View>
             <Text>What do you want to do today?</Text>
           </View>
