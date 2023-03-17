@@ -5,14 +5,22 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DailyScreen from './screens/DailyScreen';
 import InputScreen from './screens/InputScreen';
 import { TodosContext } from './components/TodosContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RootStack = createStackNavigator();
 
 const App = () => {
   const [todos, setTodos] = useState({ list: [] });
 
+  const handleDeleteTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+    AsyncStorage.setItem('todos', JSON.stringify(newTodos));
+  };
+
   return (
-    <TodosContext.Provider value={[todos, setTodos]}>
+    <TodosContext.Provider value={[todos, setTodos, handleDeleteTodo]}>
       <NavigationContainer>
         <RootStack.Navigator
           screenOptions={{

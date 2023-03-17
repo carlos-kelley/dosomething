@@ -5,7 +5,7 @@ import DeleteButton from './DeleteButton';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
-  const [todos, setTodos] = useContext(TodosContext);
+  const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
   const [dayOfYear, setDayOfYear] = useState(0);
   const [index, setIndex] = useState(0);
 
@@ -27,10 +27,8 @@ function DailyTodo() {
     }
   }, [todos, dayOfYear]);
 
-  const handleDeleteTodo = () => {
-    const newTodos = [...todos];
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
+  const handleDeleteTodoPress = () => {
+    handleDeleteTodo(index);
   };
 
   return (
@@ -40,7 +38,7 @@ function DailyTodo() {
       ) : (
         <>
           <Text>{todos[index]}</Text>
-          <DeleteButton onPress={handleDeleteTodo} />
+          <DeleteButton onPress={handleDeleteTodoPress} />
         </>
       )}
     </>
