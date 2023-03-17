@@ -7,7 +7,7 @@ Currently being styled. Core functionality is there.
 
 ## Prerequisites
 
-Before you get started, make sure you have the following software installed on you computer/phone:
+Before you get started, make sure you have the following software installed on your computer/phone:
 
 - [Node.js](https://nodejs.org/en/)
 - [PostgreSQL](https://www.postgresql.org/)
