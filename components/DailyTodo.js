@@ -113,7 +113,7 @@ function DailyTodo() {
 
   return (
     <>
-      {todos && todos.length === 0 ? (
+      {todos && todos.length === 0 && completed === false ? (
         <Text>Add a todo in the Input page</Text>
       ) : index !== null ? (
         <>
