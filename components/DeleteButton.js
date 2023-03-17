@@ -2,10 +2,10 @@
 import React from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const DeleteButton = ({ onPress }) => {
+const DeleteButton = ({ onPress, title }) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <Text>Delete</Text>
+      <Text>{title}</Text>
     </TouchableOpacity>
   );
 };

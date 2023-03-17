@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
-import { SafeAreaView, FlatList, Text } from 'react-native';
-import CompleteButton from '../components/CompleteButton';
+import { SafeAreaView } from 'react-native';
 import DailyTodo from '../components/DailyTodo';
-import DeleteButton from '../components/DeleteButton';
 import InputNavButton from '../components/InputNavButton';
 import { TodosContext } from '../components/TodosContext';
 
@@ -12,7 +10,6 @@ const DailyScreen = () => {
     <SafeAreaView>
       <InputNavButton />
       <DailyTodo todos={todos.list} />
-      <CompleteButton />
     </SafeAreaView>
   );
 };

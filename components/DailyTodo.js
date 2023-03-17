@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Text } from 'react-native';
 import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
+import CompleteButton from './CompleteButton';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
   const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
   const [dayOfYear, setDayOfYear] = useState(0);
   const [index, setIndex] = useState(null);
+  const [completed, setCompleted] = useState(false);
 
   // // This effect runs once per day only if there is at least one todo
 
@@ -25,6 +27,7 @@ function DailyTodo() {
         todos.length;
       setIndex(newIndex);
       setDayOfYear(newDayOfYear);
+      setCompleted(false);
     }
   }, [todos, dayOfYear]);
 
@@ -32,14 +35,30 @@ function DailyTodo() {
     handleDeleteTodo(index);
   };
 
+  const handleCompleteTodoPress = () => {
+    handleDeleteTodo(index);
+    setCompleted(true);
+  };
+
   return (
     <>
-      {todos && todos.length === 0 ? (
+      {todos && todos.length === 0 && completed === false ? (
         <Text>Add a todo in the Input page</Text>
       ) : index !== null ? (
         <>
-          <Text>{todos[index]}</Text>
-          <DeleteButton onPress={handleDeleteTodoPress} />
+          {completed ? (
+            <Text>Congratulations! You did something today.</Text>
+          ) : (
+            <>
+              <Text>{todos[index]}</Text>
+              <Text>Index is {index}</Text>
+              <DeleteButton title="Delete" onPress={handleDeleteTodoPress} />
+              <CompleteButton
+                title="Complete"
+                onPress={handleCompleteTodoPress}
+              />
+            </>
+          )}
         </>
       ) : null}
     </>
