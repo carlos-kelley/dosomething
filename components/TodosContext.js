@@ -1,5 +1,3 @@
-import React from 'react';
+import { createContext } from 'react';
 
-const TodosContext = React.createContext();
-
-export default TodosContext;
+export const TodosContext = createContext({ list: [] });

@@ -1,13 +1,13 @@
-import React from 'react';
-import { useState } from 'react';
-import { Text, SafeAreaView } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import React, { useContext } from 'react';
+import { SafeAreaView } from 'react-native';
 import NewTodo from '../components/NewTodo';
+import { TodosContext } from '../components/TodosContext';
 
 const InputScreen = () => {
+  const [todos, setTodos] = useContext(TodosContext);
   return (
     <SafeAreaView>
-      <NewTodo />
+      <NewTodo todos={todos.list} />
     </SafeAreaView>
   );
 };

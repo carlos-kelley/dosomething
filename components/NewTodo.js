@@ -1,20 +1,15 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import {
-  SafeAreaView,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { useState, useEffect, useContext } from 'react';
+import { SafeAreaView, Text, TextInput, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TodosContext } from './TodosContext';
 
 const STORAGE_KEY = 'todos';
 
 const NewTodo = () => {
   // This variable holds the user's input
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useContext(TodosContext);
   const [newTodo, setNewTodo] = useState('');
   const [isAddTodoSuccess, setIsAddTodoSuccess] = useState(false);
 
@@ -48,7 +43,7 @@ const NewTodo = () => {
   // This function adds the new todo to the list of todos
   const handleAddTodo = () => {
     if (newTodo.trim() !== '') {
-      setTodos([...todos, newTodo]);
+      setTodos((prevTodos) => [...prevTodos, newTodo]);
       setNewTodo('');
       setIsAddTodoSuccess(true);
       setTimeout(() => setIsAddTodoSuccess(false), 1500); // Set isAddTodoSuccess to false after 3 seconds
