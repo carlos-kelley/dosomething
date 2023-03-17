@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native';
 import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
 import CompleteButton from './CompleteButton';
@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
-  const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
+  const [todos, handleDeleteTodo] = useContext(TodosContext);
   const [index, setIndex] = useState(null);
   const [completed, setCompleted] = useState(false);
 
@@ -105,9 +105,9 @@ function DailyTodo() {
     logAsyncStorage();
   };
 
-  const logCompleted = () => {
-    console.log('completed: ', completed);
-  };
+  // const logCompleted = () => {
+  //   console.log('completed: ', completed);
+  // };
 
   return (
     <>

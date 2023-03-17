@@ -5,7 +5,7 @@ import InputNavButton from '../components/InputNavButton';
 import { TodosContext } from '../components/TodosContext';
 
 const DailyScreen = () => {
-  const [todos, setTodos] = useContext(TodosContext);
+  const [todos] = useContext(TodosContext);
   return (
     <SafeAreaView>
       <InputNavButton />

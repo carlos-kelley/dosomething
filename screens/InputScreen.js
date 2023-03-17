@@ -4,7 +4,7 @@ import NewTodo from '../components/NewTodo';
 import { TodosContext } from '../components/TodosContext';
 
 const InputScreen = () => {
-  const [todos, setTodos] = useContext(TodosContext);
+  const [todos] = useContext(TodosContext);
   return (
     <SafeAreaView>
       <NewTodo todos={todos} />
