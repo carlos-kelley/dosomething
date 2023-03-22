@@ -18,6 +18,7 @@ const InputNavButton = ({ todos }) => {
           resizeMode: 'contain',
           tintColor: 'white',
           opacity: 0.7,
+          paddingRight: 10,
         }}
       />
     </TouchableOpacity>

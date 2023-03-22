@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   },
   inputButtonWrapper: {
     alignSelf: 'flex-end',
+    paddingRight: 10,
   },
 });
 

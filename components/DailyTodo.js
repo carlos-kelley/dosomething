@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, StatusBar } from 'react-native';
 import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
 import CompleteButton from './CompleteButton';
@@ -116,6 +116,7 @@ function DailyTodo() {
 
   return (
     <>
+      <StatusBar hidden={true} />
       {todos && todos.length === 0 && completed === false ? (
         <View style={styles.todoWrapper}>
           <Text style={styles.todo}>Welcome!</Text>

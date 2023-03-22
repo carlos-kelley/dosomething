@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodosContext } from './TodosContext';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 const STORAGE_KEY = 'todos';
 
@@ -28,6 +28,8 @@ const NewTodo = () => {
   const [isAddTodoSuccess, setIsAddTodoSuccess] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [placeholderOpacity] = useState(new Animated.Value(1));
+
+  const navigation = useNavigation();
 
   // Load todos from AsyncStorage on component mount
   useEffect(() => {
@@ -132,23 +134,26 @@ const NewTodo = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.todoContainer}>
+      <SafeAreaView style={styles.todoContainer}>
+        <StatusBar hidden={true} />
         <View style={styles.topRow}>
-          {/* <View style={styles.flexcontainer}> */}
           <View style={styles.inputButtonWrapper}>
-            <Image
-              source={require('./images/homeButton.png')}
-              style={{
-                width: 40,
-                height: 40,
-                resizeMode: 'contain',
-                tintColor: 'white',
-                opacity: 0.7,
-              }}
-            />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Daily Screen')}
+            >
+              <Image
+                source={require('./images/homeButton.png')}
+                style={{
+                  width: 40,
+                  height: 40,
+                  resizeMode: 'contain',
+                  tintColor: 'white',
+                  opacity: 0.7,
+                }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
-        {/* </View> */}
         <View style={styles.centeredContent}>
           <Text style={styles.message}>
             Add all the things you've been meaning to do!
@@ -202,7 +207,7 @@ const NewTodo = () => {
             </View>
           )}
         </View>
-      </View>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
@@ -217,8 +222,8 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // paddingTop: 20,
     flex: 1,
-    paddingTop: StatusBar.currentHeight || 20,
-    backgroundColor: '#1E1E1E',
+    // paddingTop: StatusBar.currentHeight || 20,
+    // backgroundColor: '#1E1E1E',
   },
   message: {
     fontSize: 22,
@@ -230,12 +235,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     // paddingHorizontal: 20,
     marginHorizontal: 20,
-    backgroundColor: 'gray',
+    // backgroundColor: 'gray',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
 
   inputContainer: {
@@ -248,7 +253,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 20,
     justifyContent: 'center',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   textInput: {
     fontSize: 18,
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Avenir Next',
     textAlign: 'center',
-    backgroundColor: 'black',
+    // backgroundColor: 'black',
   },
   placeholder: {
     color: 'rgba(255, 255, 255, 0.75)',
@@ -266,7 +271,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir Next',
     alignSelf: 'center',
     textAlign: 'center',
-    backgroundColor: 'purple',
+    // backgroundColor: 'purple',
   },
   topRow: {
     // flexDirection: 'row',
@@ -275,11 +280,11 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 10,
     alignSelf: 'flex-start',
     paddingLeft: 10,
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
   },
   inputButtonWrapper: {
     alignSelf: 'flex-start',
-    backgroundColor: 'orange',
+    // backgroundColor: 'orange',
   },
   centeredContent: {
     flex: 1,
