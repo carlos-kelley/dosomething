@@ -14,6 +14,7 @@ import {
   StatusBar,
   Animated,
   KeyboardAvoidingView,
+  Dimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodosContext } from './TodosContext';
@@ -33,6 +34,7 @@ const NewTodo = () => {
 
   const navigation = useNavigation();
   const inputRef = useRef(null);
+  const addButtonRef = useRef(null);
 
   // Load todos from AsyncStorage on component mount
   useEffect(() => {
@@ -96,6 +98,7 @@ const NewTodo = () => {
     } catch (error) {
       console.log('Error clearing AsyncStorage:', error);
     }
+    Haptics.notificationAsync(Haptics.ImpactFeedbackStyle.Error);
   }
 
   // This function adds the new todo to the list of todos
@@ -112,6 +115,22 @@ const NewTodo = () => {
       // Set isAddTodoSuccess to false after 3 seconds
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     }
+  };
+
+  const handleBackgroundPress = (event) => {
+    const { pageX, pageY } = event.nativeEvent;
+    addButtonRef.current.measure(
+      (x, y, width, height, pageXOffset, pageYOffset) => {
+        if (
+          pageX < pageXOffset ||
+          pageX > pageXOffset + width ||
+          pageY < pageYOffset ||
+          pageY > pageYOffset + height
+        ) {
+          Keyboard.dismiss();
+        }
+      },
+    );
   };
 
   const blinkAnimation = () => {
@@ -144,15 +163,15 @@ const NewTodo = () => {
   }, [isInputFocused]);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <TouchableWithoutFeedback
+      onPressOut={handleBackgroundPress}
+      accessible={false}
+    >
       <SafeAreaView style={styles.todoContainer}>
         <StatusBar hidden={true} />
         <View style={styles.topRow}>
           <View style={styles.inputButtonWrapper}>
-            <TouchableOpacity
-              // onPress={() => navigation.navigate('Daily Screen')}
-              onPress={() => clearAsyncStorage()}
-            >
+            <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image
                 source={require('./images/homeButton.png')}
                 style={{
@@ -163,6 +182,12 @@ const NewTodo = () => {
                   opacity: 0.7,
                 }}
               />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={clearAsyncStorage}
+              style={{ marginLeft: 200 }}
+            >
+              <Image source={require('./images/deleteButton.png')} />
             </TouchableOpacity>
           </View>
         </View>
@@ -206,21 +231,27 @@ const NewTodo = () => {
               )}
             </View>
 
-            <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={handleAddTodo}
-            >
-              <Image
-                source={require('./images/addButton.png')}
-                style={{
-                  width: 40,
-                  height: 40,
-                  resizeMode: 'contain',
-                  tintColor: 'white',
-                  opacity: 0.7,
-                }}
-              />
-            </TouchableOpacity>
+            {/* <TouchableWithoutFeedback
+              onPressIn={(event) => {
+                event.stopPropagation();
+                handleAddTodo();
+              }}
+            > */}
+            <View ref={addButtonRef} style={styles.buttonContainer}>
+              <TouchableOpacity onPress={handleAddTodo}>
+                <Image
+                  source={require('./images/addButton.png')}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    resizeMode: 'contain',
+                    tintColor: 'white',
+                    opacity: 0.7,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            {/* </TouchableWithoutFeedback> */}
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
