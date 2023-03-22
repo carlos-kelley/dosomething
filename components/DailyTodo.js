@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
-import { Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
 import CompleteButton from './CompleteButton';
@@ -114,38 +114,73 @@ function DailyTodo() {
   return (
     <>
       {todos && todos.length === 0 && completed === false ? (
-        <Text>Add a todo in the Input page</Text>
+        <View>
+          <Text style={styles.header}>Welcome!</Text>
+          <Text style={styles.message}>Add a Todo on the Input page.</Text>
+        </View>
       ) : index !== null ? (
         <>
           {completed === true ? (
             <>
-              <Text>Congratulations! You did something meaningful today.</Text>
+              <Text style={styles.header}>Congratulations!</Text>
+              <Text style={styles.message}>
+                You did something meaningful today.
+              </Text>
 
-              <Text>See you tomorrow!</Text>
+              <Text style={styles.message}>See you tomorrow!</Text>
             </>
           ) : (
             <>
-              {/* <TouchableOpacity onPress={logCompleted}>
-                <Text>Log Completed</Text>
-              </TouchableOpacity> */}
-              {/* <TouchableOpacity onPress={logAsyncStorage}>
-                <Text>Log AsyncStorage</Text>
-              </TouchableOpacity> */}
-              {/* <Text>Index: {index}</Text> */}
-              <Text>{todos[index]}</Text>
-              <DeleteButton title="Delete" onPress={handleDeleteTodoPress} />
-              <CompleteButton
-                title="Complete"
-                onPress={handleCompleteTodoPress}
-              />
+              <View style={styles.todoWrapper}>
+                <Text style={styles.todo}>{todos[index]}</Text>
+                <View style={styles.buttonsContainer}>
+                  <View style={styles.buttonWrapper}>
+                    <DeleteButton
+                      title="Delete"
+                      onPress={handleDeleteTodoPress}
+                    />
+                  </View>
+                  <View style={styles.buttonWrapper}>
+                    <CompleteButton
+                      title="Complete"
+                      onPress={handleCompleteTodoPress}
+                    />
+                  </View>
+                </View>
+              </View>
             </>
           )}
         </>
       ) : (
-        <Text>Nope</Text>
+        <Text>Null error.</Text>
       )}
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  todoContainer: {
+    flex: 1,
+  },
+  todoWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  todo: {
+    fontSize: 40,
+    color: 'white',
+    fontFamily: 'Avenir Next',
+    fontWeight: 'bold',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  buttonWrapper: {
+    marginHorizontal: 5,
+  },
+});
 
 export default DailyTodo;
