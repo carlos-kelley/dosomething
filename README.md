@@ -31,3 +31,10 @@ Before you get started, make sure you have the following software installed on y
 4. Run the app with the command:
    ```sh
    npm start
+
+## Demo
+
+<video width="320" height="240" controls>
+  <source src="docs/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
