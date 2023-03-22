@@ -180,6 +180,7 @@ const NewTodo = () => {
                     opacity: placeholderOpacity,
                   },
                 ]}
+                pointerEvents="none"
               >
                 Do laundry
               </Animated.Text>

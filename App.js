@@ -37,6 +37,7 @@ const App = () => {
     <TodosContext.Provider value={[todos, setTodos, handleDeleteTodo]}>
       <NavigationContainer>
         <RootStack.Navigator
+          // initialRouteName="Daily Screen"
           screenOptions={{
             headerShown: false,
             gestureEnabled: true,

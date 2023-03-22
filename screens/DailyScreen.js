@@ -4,28 +4,45 @@ import DailyTodo from '../components/DailyTodo';
 import InputNavButton from '../components/InputNavButton';
 import { TodosContext } from '../components/TodosContext';
 import { LinearGradient } from 'expo-linear-gradient';
+import GestureRecognizer from 'react-native-swipe-gestures';
+// import { useNavigation } from '@react-navigation/native';
+
 const DailyScreen = () => {
   const [todos] = useContext(TodosContext);
+  // const navigation = useNavigation();
+
+  // const handleSwipeLeft = () => {
+  //   navigation.navigate('Input Screen');
+  // };
+
+  const config = {
+    velocityThreshold: 0.7,
+    directionalOffsetThreshold: 80,
+  };
+
   return (
-    <LinearGradient
-      colors={['#4c669f', '#3b5998', '#192f6a']}
-      style={{ flex: 1 }}
+    <GestureRecognizer
+      style={styles.dailybg}
+      // onSwipeLeft={handleSwipeLeft}
+      config={config}
     >
-      <SafeAreaView style={styles.dailybg}>
-        <View style={styles.topRow}>
-          <View style={styles.inputButtonWrapper}>
+      <LinearGradient
+        colors={['#4c669f', '#3b5998', '#192f6a']}
+        style={{ flex: 1 }}
+      >
+        <SafeAreaView style={styles.dailybg}>
+          <View style={styles.topRow}>
             <InputNavButton />
           </View>
-        </View>
-        <DailyTodo todos={todos} />
-      </SafeAreaView>
-    </LinearGradient>
+          <DailyTodo todos={todos} />
+        </SafeAreaView>
+      </LinearGradient>
+    </GestureRecognizer>
   );
 };
 
 const styles = StyleSheet.create({
   dailybg: {
-    // backgroundColor: 'linear-gradient(to bottom, rgb(18, 167, 173), #fff)',
     flex: 1,
   },
   topRow: {
