@@ -204,7 +204,7 @@ const NewTodo = () => {
             <View style={styles.inputContainer}>
               <TextInput
                 ref={inputRef}
-                maxLength={30}
+                maxLength={40}
                 returnKeyType="done"
                 onSubmitEditing={handleAddTodo}
                 onFocus={() => setIsInputFocused(true)}
@@ -226,7 +226,7 @@ const NewTodo = () => {
                   ]}
                   pointerEvents="none"
                 >
-                  Do laundry
+                  Add a task
                 </Animated.Text>
               )}
             </View>
