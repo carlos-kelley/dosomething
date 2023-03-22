@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Image,
   StatusBar,
+  Animated,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodosContext } from './TodosContext';
@@ -26,6 +27,7 @@ const NewTodo = () => {
   const [newTodo, setNewTodo] = useState('');
   const [isAddTodoSuccess, setIsAddTodoSuccess] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [placeholderOpacity] = useState(new Animated.Value(1));
 
   // Load todos from AsyncStorage on component mount
   useEffect(() => {
@@ -52,6 +54,10 @@ const NewTodo = () => {
 
     loadTodos();
   }, []);
+
+  useEffect(() => {
+    blinkAnimation();
+  }, [isInputFocused]);
 
   // Save todos to AsyncStorage when the list is updated
   useEffect(() => {
@@ -103,6 +109,27 @@ const NewTodo = () => {
     }
   };
 
+  const blinkAnimation = () => {
+    if (!isInputFocused) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(placeholderOpacity, {
+            toValue: 0.7,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(placeholderOpacity, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+          }),
+        ]),
+      ).start();
+    } else {
+      placeholderOpacity.setValue(1);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.todoContainer}>
@@ -110,19 +137,34 @@ const NewTodo = () => {
         <Text style={styles.todo}>
           Add all the things you've been meaning to do!
         </Text>
-        <TextInput
-          style={styles.inputContainer}
-          maxLength={30}
-          returnKeyType="done"
-          onSubmitEditing={handleAddTodo}
-          onFocus={() => setIsInputFocused(true)}
-          onBlur={() => setIsInputFocused(false)}
-          blurOnSubmit={false}
-          placeholder={isInputFocused ? '' : 'Do laundry'}
-          placeholderTextColor="rgba(255, 255, 255, 0.75)"
-          onChangeText={setNewTodo}
-          value={newTodo}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            maxLength={30}
+            returnKeyType="done"
+            onSubmitEditing={handleAddTodo}
+            onFocus={() => setIsInputFocused(true)}
+            onBlur={() => setIsInputFocused(false)}
+            blurOnSubmit={false}
+            placeholder={isInputFocused ? '' : ' '}
+            placeholderTextColor="rgba(255, 255, 255, 0.75)"
+            onChangeText={setNewTodo}
+            value={newTodo}
+            style={styles.textInput}
+          />
+          {!isInputFocused && (
+            <Animated.Text
+              style={[
+                styles.placeholder,
+                {
+                  opacity: placeholderOpacity,
+                },
+              ]}
+            >
+              Do laundry
+            </Animated.Text>
+          )}
+        </View>
+
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={handleAddTodo}
@@ -178,13 +220,25 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     opacity: 1,
+    alignSelf: 'center',
+    marginBottom: 20,
+    justifyContent: 'center',
+  },
+  textInput: {
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
     fontFamily: 'Avenir Next',
     textAlign: 'center',
+  },
+  placeholder: {
+    color: 'rgba(255, 255, 255, 0.75)',
+    position: 'absolute',
+    fontSize: 18,
+    fontWeight: 'bold',
+    fontFamily: 'Avenir Next',
     alignSelf: 'center',
-    marginBottom: 20,
+    textAlign: 'center',
   },
 });
 
