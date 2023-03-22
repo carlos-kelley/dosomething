@@ -2,6 +2,7 @@
 import React from 'react';
 import { useState, useEffect, useContext, useRef } from 'react';
 import {
+  Button,
   View,
   SafeAreaView,
   Text,
@@ -12,6 +13,7 @@ import {
   Image,
   StatusBar,
   Animated,
+  KeyboardAvoidingView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodosContext } from './TodosContext';
@@ -148,7 +150,8 @@ const NewTodo = () => {
         <View style={styles.topRow}>
           <View style={styles.inputButtonWrapper}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Daily Screen')}
+              // onPress={() => navigation.navigate('Daily Screen')}
+              onPress={() => clearAsyncStorage()}
             >
               <Image
                 source={require('./images/homeButton.png')}
@@ -163,61 +166,63 @@ const NewTodo = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.centeredContent}>
-          <Text style={styles.message}>
-            Add all the things you've been meaning to do!
-          </Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={inputRef}
-              maxLength={30}
-              returnKeyType="done"
-              onSubmitEditing={handleAddTodo}
-              onFocus={() => setIsInputFocused(true)}
-              onBlur={() => setIsInputFocused(false)}
-              blurOnSubmit={false}
-              placeholder={isInputFocused ? '' : ' '}
-              placeholderTextColor="rgba(255, 255, 255, 0.75)"
-              onChangeText={setNewTodo}
-              value={newTodo}
-              style={styles.textInput}
-            />
-            {!isInputFocused && !newTodo && (
-              <Animated.Text
-                style={[
-                  styles.placeholder,
-                  {
-                    opacity: placeholderOpacity,
-                  },
-                ]}
-                pointerEvents="none"
-              >
-                Do laundry
-              </Animated.Text>
-            )}
-          </View>
-
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={handleAddTodo}
-          >
-            <Image
-              source={require('./images/addButton.png')}
-              style={{
-                width: 40,
-                height: 40,
-                resizeMode: 'contain',
-                tintColor: 'white',
-                opacity: 0.7,
-              }}
-            />
-          </TouchableOpacity>
-          {isAddTodoSuccess && (
-            <View>
-              <Text>Added!</Text>
+        {/* <Button
+          title="Clear AsyncStorage"
+          onPress={clearAsyncStorage}
+          style={{ color: 'white' }}
+        /> */}
+        <KeyboardAvoidingView style={styles.todoContainer} behavior="padding">
+          <View style={styles.centeredContent}>
+            <Text style={styles.message}>
+              Add all the things you've been meaning to do!
+            </Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                ref={inputRef}
+                maxLength={30}
+                returnKeyType="done"
+                onSubmitEditing={handleAddTodo}
+                onFocus={() => setIsInputFocused(true)}
+                onBlur={() => setIsInputFocused(false)}
+                blurOnSubmit={false}
+                placeholder={isInputFocused ? '' : ' '}
+                placeholderTextColor="rgba(255, 255, 255, 0.75)"
+                onChangeText={setNewTodo}
+                value={newTodo}
+                style={styles.textInput}
+              />
+              {!isInputFocused && !newTodo && (
+                <Animated.Text
+                  style={[
+                    styles.placeholder,
+                    {
+                      opacity: placeholderOpacity,
+                    },
+                  ]}
+                  pointerEvents="none"
+                >
+                  Do laundry
+                </Animated.Text>
+              )}
             </View>
-          )}
-        </View>
+
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={handleAddTodo}
+            >
+              <Image
+                source={require('./images/addButton.png')}
+                style={{
+                  width: 40,
+                  height: 40,
+                  resizeMode: 'contain',
+                  tintColor: 'white',
+                  opacity: 0.7,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

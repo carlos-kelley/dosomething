@@ -102,7 +102,7 @@ function DailyTodo() {
 
   const handleCompleteTodoPress = async () => {
     console.log('in handleCompleteTodoPress');
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Success);
+    Haptics.notificationAsync(Haptics.ImpactFeedbackStyle.Success);
     handleDeleteTodo(index);
     setCompleted(true);
     console.log('completed: ', completed);
@@ -126,12 +126,14 @@ function DailyTodo() {
         <>
           {completed === true ? (
             <>
-              <Text style={styles.header}>Congratulations!</Text>
-              <Text style={styles.message}>
-                You did something meaningful today.
-              </Text>
+              <View style={styles.todoWrapper}>
+                <Text style={styles.todo}>Congrats!</Text>
+                <Text style={styles.message}>
+                  You did something meaningful today.
+                </Text>
 
-              <Text style={styles.message}>See you tomorrow!</Text>
+                <Text style={styles.message}>See you tomorrow!</Text>
+              </View>
             </>
           ) : (
             <>
@@ -189,6 +191,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginHorizontal: 20,
+    marginBottom: 10,
   },
   buttonsContainer: {
     flexDirection: 'row',
