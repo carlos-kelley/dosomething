@@ -133,87 +133,91 @@ const NewTodo = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.todoContainer}>
-        <View style={styles.flexcontainer}>
-          <View style={styles.topRow}>
-            <View style={styles.inputButtonWrapper}>
-              <Image
-                source={require('./images/homeButton.png')}
-                style={{
-                  width: 40,
-                  height: 40,
-                  resizeMode: 'contain',
-                  tintColor: 'white',
-                  opacity: 0.7,
-                }}
-              />
-            </View>
+        <View style={styles.topRow}>
+          {/* <View style={styles.flexcontainer}> */}
+          <View style={styles.inputButtonWrapper}>
+            <Image
+              source={require('./images/homeButton.png')}
+              style={{
+                width: 40,
+                height: 40,
+                resizeMode: 'contain',
+                tintColor: 'white',
+                opacity: 0.7,
+              }}
+            />
           </View>
         </View>
-        <Text style={styles.message}>
-          Add all the things you've been meaning to do!
-        </Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            maxLength={30}
-            returnKeyType="done"
-            onSubmitEditing={handleAddTodo}
-            onFocus={() => setIsInputFocused(true)}
-            onBlur={() => setIsInputFocused(false)}
-            blurOnSubmit={false}
-            placeholder={isInputFocused ? '' : ' '}
-            placeholderTextColor="rgba(255, 255, 255, 0.75)"
-            onChangeText={setNewTodo}
-            value={newTodo}
-            style={styles.textInput}
-          />
-          {!isInputFocused && (
-            <Animated.Text
-              style={[
-                styles.placeholder,
-                {
-                  opacity: placeholderOpacity,
-                },
-              ]}
-            >
-              Do laundry
-            </Animated.Text>
+        {/* </View> */}
+        <View style={styles.centeredContent}>
+          <Text style={styles.message}>
+            Add all the things you've been meaning to do!
+          </Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              maxLength={30}
+              returnKeyType="done"
+              onSubmitEditing={handleAddTodo}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
+              blurOnSubmit={false}
+              placeholder={isInputFocused ? '' : ' '}
+              placeholderTextColor="rgba(255, 255, 255, 0.75)"
+              onChangeText={setNewTodo}
+              value={newTodo}
+              style={styles.textInput}
+            />
+            {!isInputFocused && (
+              <Animated.Text
+                style={[
+                  styles.placeholder,
+                  {
+                    opacity: placeholderOpacity,
+                  },
+                ]}
+              >
+                Do laundry
+              </Animated.Text>
+            )}
+          </View>
+
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={handleAddTodo}
+          >
+            <Image
+              source={require('./images/addButton.png')}
+              style={{
+                width: 40,
+                height: 40,
+                resizeMode: 'contain',
+                tintColor: 'white',
+                opacity: 0.7,
+              }}
+            />
+          </TouchableOpacity>
+          {isAddTodoSuccess && (
+            <View>
+              <Text>Added!</Text>
+            </View>
           )}
         </View>
-
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={handleAddTodo}
-        >
-          <Image
-            source={require('./images/addButton.png')}
-            style={{
-              width: 40,
-              height: 40,
-              resizeMode: 'contain',
-              tintColor: 'white',
-              opacity: 0.7,
-            }}
-          />
-        </TouchableOpacity>
-        {isAddTodoSuccess && (
-          <View>
-            <Text>Added!</Text>
-          </View>
-        )}
       </View>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
-    backgroundColor: 'green',
-  },
+  // flexContainer: {
+  //   flex: 1,
+  //   backgroundColor: 'green',
+  // },
   todoContainer: {
+    // flex: 1,
+    // justifyContent: 'center',
+    // paddingTop: 20,
     flex: 1,
-    justifyContent: 'center',
-    paddingTop: 20,
+    paddingTop: StatusBar.currentHeight || 20,
     backgroundColor: '#1E1E1E',
   },
   message: {
@@ -265,15 +269,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'purple',
   },
   topRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingHorizontal: 10,
+    // flexDirection: 'row',
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start',
+    // paddingHorizontal: 10,
+    alignSelf: 'flex-start',
+    paddingLeft: 10,
     backgroundColor: 'pink',
   },
   inputButtonWrapper: {
     alignSelf: 'flex-start',
     backgroundColor: 'orange',
+  },
+  centeredContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
