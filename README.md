@@ -34,7 +34,5 @@ Before you get started, make sure you have the following software installed on y
 
 ## Demo
 
-<video width="320" height="240" controls>
-  <source src="docs/demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+https://user-images.githubusercontent.com/47365649/227019182-a29915aa-86d2-40a8-9721-cdf47989d75d.mp4
+
