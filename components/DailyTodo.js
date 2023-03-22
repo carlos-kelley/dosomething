@@ -117,8 +117,8 @@ function DailyTodo() {
   return (
     <>
       {todos && todos.length === 0 && completed === false ? (
-        <View>
-          <Text style={styles.header}>Welcome!</Text>
+        <View style={styles.todoWrapper}>
+          <Text style={styles.todo}>Welcome!</Text>
           <Text style={styles.message}>Add a Todo on the Input page.</Text>
         </View>
       ) : index !== null ? (
@@ -170,11 +170,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  message: {
+    fontSize: 22,
+    color: 'white',
+    fontFamily: 'Avenir Next',
+    fontWeight: '600',
+    textAlignVertical: 'top',
+    textAlign: 'center',
+    marginBottom: 20,
+    // paddingHorizontal: 20,
+    marginHorizontal: 20,
+  },
   todo: {
     fontSize: 40,
     color: 'white',
     fontFamily: 'Avenir Next',
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginHorizontal: 20,
   },
   buttonsContainer: {
     flexDirection: 'row',

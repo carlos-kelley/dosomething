@@ -133,8 +133,23 @@ const NewTodo = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.todoContainer}>
-        <StatusBar translucent backgroundColor="transparent" />
-        <Text style={styles.todo}>
+        <View style={styles.flexcontainer}>
+          <View style={styles.topRow}>
+            <View style={styles.inputButtonWrapper}>
+              <Image
+                source={require('./images/homeButton.png')}
+                style={{
+                  width: 40,
+                  height: 40,
+                  resizeMode: 'contain',
+                  tintColor: 'white',
+                  opacity: 0.7,
+                }}
+              />
+            </View>
+          </View>
+        </View>
+        <Text style={styles.message}>
           Add all the things you've been meaning to do!
         </Text>
         <View style={styles.inputContainer}>
@@ -191,26 +206,32 @@ const NewTodo = () => {
 };
 
 const styles = StyleSheet.create({
-  // safeArea: {
-  //   flex: 1,
-  // },
+  flexContainer: {
+    flex: 1,
+    backgroundColor: 'green',
+  },
   todoContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    paddingTop: 20,
+    backgroundColor: '#1E1E1E',
   },
-  todo: {
+  message: {
     fontSize: 22,
     color: 'white',
     fontFamily: 'Avenir Next',
-    fontWeight: 'bold',
+    fontWeight: '600',
     textAlignVertical: 'top',
     textAlign: 'center',
     marginBottom: 20,
+    // paddingHorizontal: 20,
+    marginHorizontal: 20,
+    backgroundColor: 'gray',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    backgroundColor: 'red',
   },
 
   inputContainer: {
@@ -223,6 +244,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 20,
     justifyContent: 'center',
+    backgroundColor: 'white',
   },
   textInput: {
     fontSize: 18,
@@ -230,6 +252,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Avenir Next',
     textAlign: 'center',
+    backgroundColor: 'black',
   },
   placeholder: {
     color: 'rgba(255, 255, 255, 0.75)',
@@ -239,6 +262,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir Next',
     alignSelf: 'center',
     textAlign: 'center',
+    backgroundColor: 'purple',
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingHorizontal: 10,
+    backgroundColor: 'pink',
+  },
+  inputButtonWrapper: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'orange',
   },
 });
 
