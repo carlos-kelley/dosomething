@@ -7,10 +7,11 @@ import DailyScreen from './screens/DailyScreen';
 import InputScreen from './screens/InputScreen';
 import { TodosContext } from './components/TodosContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const RootStack = createStackNavigator();
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const App = () => {
+  const Tab = createMaterialTopTabNavigator();
+
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
@@ -36,17 +37,10 @@ const App = () => {
   return (
     <TodosContext.Provider value={[todos, setTodos, handleDeleteTodo]}>
       <NavigationContainer>
-        <RootStack.Navigator
-          // initialRouteName="Daily Screen"
-          screenOptions={{
-            headerShown: false,
-            gestureEnabled: true,
-            gestureDirection: 'horizontal',
-          }}
-        >
-          <RootStack.Screen name="Daily Screen" component={DailyScreen} />
-          <RootStack.Screen name="Input Screen" component={InputScreen} />
-        </RootStack.Navigator>
+        <Tab.Navigator tabBar={() => null}>
+          <Tab.Screen name="Daily Screen" component={DailyScreen} />
+          <Tab.Screen name="Input Screen" component={InputScreen} />
+        </Tab.Navigator>
       </NavigationContainer>
     </TodosContext.Provider>
   );

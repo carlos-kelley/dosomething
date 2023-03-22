@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import {
   View,
   SafeAreaView,
@@ -30,6 +30,7 @@ const NewTodo = () => {
   const [placeholderOpacity] = useState(new Animated.Value(1));
 
   const navigation = useNavigation();
+  const inputRef = useRef(null);
 
   // Load todos from AsyncStorage on component mount
   useEffect(() => {
@@ -132,6 +133,14 @@ const NewTodo = () => {
     }
   };
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.setNativeProps({
+        selection: { start: newTodo.length, end: newTodo.length },
+      });
+    }
+  }, [isInputFocused]);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView style={styles.todoContainer}>
@@ -160,6 +169,7 @@ const NewTodo = () => {
           </Text>
           <View style={styles.inputContainer}>
             <TextInput
+              ref={inputRef}
               maxLength={30}
               returnKeyType="done"
               onSubmitEditing={handleAddTodo}
@@ -172,7 +182,7 @@ const NewTodo = () => {
               value={newTodo}
               style={styles.textInput}
             />
-            {!isInputFocused && (
+            {!isInputFocused && !newTodo && (
               <Animated.Text
                 style={[
                   styles.placeholder,
