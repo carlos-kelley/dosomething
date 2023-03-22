@@ -246,7 +246,7 @@ const NewTodo = () => {
                     height: 40,
                     resizeMode: 'contain',
                     tintColor: 'white',
-                    opacity: 0.7,
+                    opacity: newTodo.length > 0 ? 1 : 0.7,
                   }}
                 />
               </TouchableOpacity>
