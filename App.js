@@ -2,12 +2,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import DailyScreen from './screens/DailyScreen';
 import InputScreen from './screens/InputScreen';
 import { TodosContext } from './components/TodosContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import * as Haptics from 'expo-haptics';
+import 'react-native-gesture-handler';
+import { PanGestureHandler } from 'react-native-gesture-handler';
 
 const App = () => {
   const Tab = createMaterialTopTabNavigator();
@@ -34,9 +36,19 @@ const App = () => {
     AsyncStorage.setItem('todos', JSON.stringify(newTodos));
   };
 
+  const handleStateChange = (state) => {
+    console.log('in handleStateChange, state.index: ', state.index);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  };
+
   return (
     <TodosContext.Provider value={[todos, setTodos, handleDeleteTodo]}>
-      <NavigationContainer>
+      <NavigationContainer
+        onStateChange={(state) => {
+          console.log('New state is', state);
+          handleStateChange(state);
+        }}
+      >
         <Tab.Navigator tabBar={() => null}>
           <Tab.Screen name="Daily Screen" component={DailyScreen} />
           <Tab.Screen name="Input Screen" component={InputScreen} />
