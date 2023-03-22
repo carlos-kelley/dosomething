@@ -183,12 +183,12 @@ const NewTodo = () => {
                 }}
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={clearAsyncStorage}
               style={{ marginLeft: 200 }}
             >
               <Image source={require('./images/deleteButton.png')} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         {/* <Button
