@@ -6,13 +6,14 @@ import { TodosContext } from '../components/TodosContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import GestureRecognizer from 'react-native-swipe-gestures';
 // import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 
 const DailyScreen = () => {
   const [todos] = useContext(TodosContext);
   // const navigation = useNavigation();
 
   // const handleSwipeLeft = () => {
-  //   navigation.navigate('Input Screen');
+  //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   // };
 
   const config = {
@@ -23,8 +24,11 @@ const DailyScreen = () => {
   return (
     <GestureRecognizer
       style={styles.dailybg}
-      // onSwipeLeft={handleSwipeLeft}
       config={config}
+      // onSwipeLeft={() => {
+      //   console.log('swiped left');
+      //   handleSwipeLeft();
+      // }}
     >
       <LinearGradient
         colors={['#4c669f', '#3b5998', '#192f6a']}

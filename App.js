@@ -6,14 +6,10 @@ import DailyScreen from './screens/DailyScreen';
 import InputScreen from './screens/InputScreen';
 import { TodosContext } from './components/TodosContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import * as Haptics from 'expo-haptics';
-import 'react-native-gesture-handler';
-import { PanGestureHandler } from 'react-native-gesture-handler';
 
 const App = () => {
-  const Tab = createMaterialTopTabNavigator();
-
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
@@ -36,23 +32,32 @@ const App = () => {
     AsyncStorage.setItem('todos', JSON.stringify(newTodos));
   };
 
-  const handleStateChange = (state) => {
-    console.log('in handleStateChange, state.index: ', state.index);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  };
+  const renderScene = SceneMap({
+    daily: DailyScreen,
+    input: InputScreen,
+  });
+
+  const initialLayout = { width: '100%' };
+
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'daily', title: 'Daily Screen' },
+    { key: 'input', title: 'Input Screen' },
+  ]);
 
   return (
     <TodosContext.Provider value={[todos, setTodos, handleDeleteTodo]}>
-      <NavigationContainer
-        onStateChange={(state) => {
-          console.log('New state is', state);
-          handleStateChange(state);
-        }}
-      >
-        <Tab.Navigator tabBar={() => null}>
-          <Tab.Screen name="Daily Screen" component={DailyScreen} />
-          <Tab.Screen name="Input Screen" component={InputScreen} />
-        </Tab.Navigator>
+      <NavigationContainer>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={initialLayout}
+          renderTabBar={() => null}
+          onSwipeStart={() =>
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+          }
+        />
       </NavigationContainer>
     </TodosContext.Provider>
   );
