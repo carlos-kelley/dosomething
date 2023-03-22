@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
 import CompleteButton from './CompleteButton';
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   buttonWrapper: {
-    marginHorizontal: 5,
+    marginHorizontal: 20,
   },
 });
 

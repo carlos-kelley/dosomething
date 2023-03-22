@@ -8,10 +8,15 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  StyleSheet,
+  Image,
+  StatusBar,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodosContext } from './TodosContext';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const STORAGE_KEY = 'todos';
 
@@ -20,6 +25,7 @@ const NewTodo = () => {
   const [todos, setTodos] = useContext(TodosContext);
   const [newTodo, setNewTodo] = useState('');
   const [isAddTodoSuccess, setIsAddTodoSuccess] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   // Load todos from AsyncStorage on component mount
   useEffect(() => {
@@ -93,51 +99,93 @@ const NewTodo = () => {
       setIsAddTodoSuccess(true);
       setTimeout(() => setIsAddTodoSuccess(false), 1500);
       // Set isAddTodoSuccess to false after 3 seconds
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     }
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <SafeAreaView>
-        {/* eslint-disable-next-line react-native/no-inline-styles */}
-        <View style={{ height: '100%' }}>
+      <View style={styles.todoContainer}>
+        <StatusBar translucent backgroundColor="transparent" />
+        <Text style={styles.todo}>
+          Add all the things you've been meaning to do!
+        </Text>
+        <TextInput
+          style={styles.inputContainer}
+          maxLength={30}
+          returnKeyType="done"
+          onSubmitEditing={handleAddTodo}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
+          blurOnSubmit={false}
+          placeholder={isInputFocused ? '' : 'Do laundry'}
+          placeholderTextColor="rgba(255, 255, 255, 0.75)"
+          onChangeText={setNewTodo}
+          value={newTodo}
+        />
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={handleAddTodo}
+        >
+          <Image
+            source={require('./images/addButton.png')}
+            style={{
+              width: 40,
+              height: 40,
+              resizeMode: 'contain',
+              tintColor: 'white',
+              opacity: 0.7,
+            }}
+          />
+        </TouchableOpacity>
+        {isAddTodoSuccess && (
           <View>
-            <TouchableOpacity
-              onPress={() => {
-                clearAsyncStorage();
-              }}
-            >
-              <Text>Clear AsyncStorage</Text>
-            </TouchableOpacity>
+            <Text>Added!</Text>
           </View>
-          {/* input todos*/}
-          <View>
-            <TextInput
-              maxLength={30}
-              returnKeyType="done"
-              onSubmitEditing={handleAddTodo}
-              blurOnSubmit={false}
-              placeholder="Add all the things you've been meaning to do!"
-              onChangeText={setNewTodo}
-              value={newTodo}
-            />
-          </View>
-          {/* add todos button */}
-          <View>
-            <TouchableOpacity onPress={handleAddTodo}>
-              <Text>Add</Text>
-            </TouchableOpacity>
-          </View>
-
-          {isAddTodoSuccess && (
-            <View>
-              <Text>Added!</Text>
-            </View>
-          )}
-        </View>
-      </SafeAreaView>
+        )}
+      </View>
     </TouchableWithoutFeedback>
   );
 };
+
+const styles = StyleSheet.create({
+  // safeArea: {
+  //   flex: 1,
+  // },
+  todoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  todo: {
+    fontSize: 22,
+    color: 'white',
+    fontFamily: 'Avenir Next',
+    fontWeight: 'bold',
+    textAlignVertical: 'top',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+
+  inputContainer: {
+    width: 300,
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 20,
+    padding: 10,
+    opacity: 1,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    fontFamily: 'Avenir Next',
+    textAlign: 'center',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+});
 
 export default NewTodo;
