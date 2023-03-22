@@ -5,6 +5,7 @@ import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
 import CompleteButton from './CompleteButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Haptics from 'expo-haptics';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
@@ -89,6 +90,7 @@ function DailyTodo() {
   }, [todos]);
 
   const handleDeleteTodoPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); // Trigger haptic feedback
     handleDeleteTodo(index);
     if (index === todos.length - 1) {
       console.log('in handleDeleteTodoPress, index === todos.length');
@@ -100,6 +102,7 @@ function DailyTodo() {
 
   const handleCompleteTodoPress = async () => {
     console.log('in handleCompleteTodoPress');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Success);
     handleDeleteTodo(index);
     setCompleted(true);
     console.log('completed: ', completed);
