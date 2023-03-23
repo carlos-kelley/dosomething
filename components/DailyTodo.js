@@ -26,7 +26,7 @@ function DailyTodo() {
     const storedIndex = await AsyncStorage.getItem('index');
     const storedTimestamp = await AsyncStorage.getItem('timestamp');
     const storedCompleted = await AsyncStorage.getItem('completed');
-    console.log('storedIndex: ', storedIndex);
+    console.log('storedIndex: ', storedIndex, 'index: ', index);
     console.log('storedTimestamp: ', storedTimestamp);
     console.log('storedCompleted: ', storedCompleted);
   };
@@ -93,11 +93,20 @@ function DailyTodo() {
 
   useEffect(() => {
     console.log('in dailyTodo useEffect, todos: ', todos);
+    console.log('index: ', index);
+
     console.log(new Date().getTime());
     const getInitialIndex = async () => {
-      const midnight = new Date();
-      midnight.setHours(24, 0, 0, 0);
-      const timestamp = midnight.getTime();
+      // Replace this block:
+      // const midnight = new Date();
+      // midnight.setHours(24, 0, 0, 0);
+      // const timestamp = midnight.getTime();
+
+      // With this block to set a custom timestamp of 1 ish minutes:
+      const customTime = new Date();
+      customTime.setMinutes(customTime.getMinutes() + 1); // Set the switch time to 1 minutes from now
+      const timestamp = customTime.getTime();
+
       const storedIndex = await AsyncStorage.getItem('index');
       const storedTimestamp = await AsyncStorage.getItem('timestamp');
 
@@ -177,6 +186,9 @@ function DailyTodo() {
         <View style={styles.todoWrapper}>
           <Text style={styles.todo}>Welcome!</Text>
           <Text style={styles.message}>Add a Todo on the Input page.</Text>
+          <View>
+            <Text>Index: {index}</Text>
+          </View>
         </View>
       ) : index !== null ? (
         <>
@@ -204,6 +216,9 @@ function DailyTodo() {
             <>
               <View style={styles.todoWrapper}>
                 <Text style={styles.todo}>{todos[index]}</Text>
+                <View>
+                  <Text>{index}</Text>
+                </View>
                 <View style={styles.buttonsContainer}>
                   <View style={styles.buttonWrapper}>
                     <DeleteButton
