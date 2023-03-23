@@ -6,8 +6,9 @@
 
 ## Built With
 
-- [![React Native][reactnative]][reactnative-url]]
-- [![NPM][npm]][npm-url]]
+- [![React Native][reactnative]][reactnative-url]
+- [![NPM][npm]][npm-url]
+- [![Expo][expo]][expo-url]
 
 A full list of dependencies can be found in `package.json`.
 
@@ -33,7 +34,7 @@ Before you get started, make sure you have the following software installed on y
    ```
    
 2. Install the Expo CLI
-```sh
+   ```sh
    npm install -g expo-cli
    ```
 
@@ -61,7 +62,9 @@ Carlos Kelley - [LinkedIn](https://linkedin.com/in/carloskelley) - [Protonmail](
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[reactnative]: https://img.shields.io/badge/GitHub-React_Native-181717?style=for-the-badge&logo=github)](https://github.com/facebook/react-native)
+[expo-url]: https://expo.dev/
+[expo]: https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=#D06A52
+[reactnative]: https://img.shields.io/badge/React_Native-61DAFB?style=for-the-badge&logo=react&logoColor=white
 [reactnative-url]: https://reactnative.dev
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
