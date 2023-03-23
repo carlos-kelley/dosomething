@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar } from 'react-native';
 import { TodosContext } from './TodosContext';
 import DeleteButton from './DeleteButton';
@@ -9,9 +9,12 @@ import * as Haptics from 'expo-haptics';
 import { Audio } from 'expo-av';
 import soundUrl0 from './sounds/Blow.mp3';
 import soundUrl1 from './sounds/Bottle.mp3';
+import Confetti from 'react-native-confetti';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
+  const confettiRef = useRef(null);
+
   const soundUrls = [soundUrl0, soundUrl1];
   const [sounds, setSounds] = useState(null);
   // eslint-disable-next-line no-unused-vars
@@ -27,6 +30,12 @@ function DailyTodo() {
     console.log('storedTimestamp: ', storedTimestamp);
     console.log('storedCompleted: ', storedCompleted);
   };
+
+  useEffect(() => {
+    if (completed) {
+      confettiRef.current.startConfetti();
+    }
+  }, [completed]);
 
   useEffect(() => {
     console.log('in completed useEffect, completed is:', completed);
@@ -173,6 +182,9 @@ function DailyTodo() {
         <>
           {completed === true ? (
             <>
+              <View style={styles.confettiContainer}>
+                <Confetti ref={confettiRef} />
+              </View>
               <View style={styles.todoWrapper}>
                 <Text style={styles.todo}>Congrats!</Text>
                 <Text style={styles.message}>
@@ -247,6 +259,13 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     marginHorizontal: 20,
+  },
+  confettiContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
 

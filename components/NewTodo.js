@@ -21,7 +21,8 @@ import { TodosContext } from './TodosContext';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
-import GestureRecognizer from 'react-native-swipe-gestures';
+import { Audio } from 'expo-av';
+import soundUrl from './sounds/Morse.mp3';
 
 const STORAGE_KEY = 'todos';
 
@@ -32,10 +33,31 @@ const NewTodo = () => {
   const [isAddTodoSuccess, setIsAddTodoSuccess] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [placeholderOpacity] = useState(new Animated.Value(1));
+  const [sound, setSound] = useState(null);
 
   const navigation = useNavigation();
   const inputRef = useRef(null);
   const addButtonRef = useRef(null);
+
+  useEffect(() => {
+    async function loadSound() {
+      const soundObject = new Audio.Sound();
+      try {
+        await soundObject.loadAsync(soundUrl);
+        await soundObject.setVolumeAsync(0.25);
+        setSound(soundObject);
+      } catch (error) {
+        console.log('Error loading sound:', error);
+      }
+    }
+    loadSound();
+
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
 
   // Load todos from AsyncStorage on component mount
   useEffect(() => {
@@ -105,6 +127,7 @@ const NewTodo = () => {
   // This function adds the new todo to the list of todos
   const handleAddTodo = () => {
     logAsyncStorage();
+    playSound();
     console.log('in handleAddTodo, newTodo: ', newTodo);
     if (newTodo.trim() !== '') {
       console.log('in handleAddTodo, todos is ', todos);
@@ -117,14 +140,6 @@ const NewTodo = () => {
       // play
     }
   };
-
-  // const handleSwipeRight = () => {
-  //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  // };
-  // const config = {
-  //   velocityThreshold: 0.7,
-  //   directionalOffsetThreshold: 80,
-  // };
 
   const handleBackgroundPress = (event) => {
     const { pageX, pageY } = event.nativeEvent;
@@ -171,106 +186,111 @@ const NewTodo = () => {
     }
   }, [isInputFocused]);
 
+  const playSound = async () => {
+    if (sound) {
+      try {
+        await sound.setPositionAsync(0); // Reset sound to start
+        await sound.playAsync();
+      } catch (error) {
+        console.log('Error playing sound:', error);
+      }
+    }
+  };
+
   return (
-    <GestureRecognizer
-      // onSwipeRight={handleSwipeRight}
-      // config={config}
-      style={{ flex: 1 }}
+    <TouchableWithoutFeedback
+      onPressOut={handleBackgroundPress}
+      accessible={false}
     >
-      <TouchableWithoutFeedback
-        onPressOut={handleBackgroundPress}
-        accessible={false}
-      >
-        <SafeAreaView style={styles.todoContainer}>
-          <StatusBar hidden={true} />
-          <View style={styles.topRow}>
-            <View style={styles.inputButtonWrapper}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Image
-                  source={require('./images/homeButton.png')}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    resizeMode: 'contain',
-                    tintColor: 'white',
-                    opacity: 0.7,
-                  }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={clearAsyncStorage}
-                style={{ marginLeft: 200 }}
-              >
-                <Image source={require('./images/deleteButton.png')} />
-              </TouchableOpacity>
-            </View>
+      <SafeAreaView style={styles.todoContainer}>
+        <StatusBar hidden={true} />
+        <View style={styles.topRow}>
+          <View style={styles.inputButtonWrapper}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={require('./images/homeButton.png')}
+                style={{
+                  width: 40,
+                  height: 40,
+                  resizeMode: 'contain',
+                  tintColor: 'white',
+                  opacity: 0.7,
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={clearAsyncStorage}
+              style={{ marginLeft: 200 }}
+            >
+              <Image source={require('./images/deleteButton.png')} />
+            </TouchableOpacity>
           </View>
-          {/* <Button
+        </View>
+        {/* <Button
           title="Clear AsyncStorage"
           onPress={clearAsyncStorage}
           style={{ color: 'white' }}
         /> */}
-          <KeyboardAvoidingView style={styles.todoContainer} behavior="padding">
-            <View style={styles.centeredContent}>
-              <Text style={styles.message}>
-                Add all the things you've been meaning to do!
-              </Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  ref={inputRef}
-                  maxLength={40}
-                  returnKeyType="done"
-                  onSubmitEditing={handleAddTodo}
-                  onFocus={() => setIsInputFocused(true)}
-                  onBlur={() => setIsInputFocused(false)}
-                  blurOnSubmit={false}
-                  placeholder={isInputFocused ? '' : ' '}
-                  placeholderTextColor="rgba(255, 255, 255, 0.75)"
-                  onChangeText={setNewTodo}
-                  value={newTodo}
-                  style={styles.textInput}
-                />
-                {!isInputFocused && !newTodo && (
-                  <Animated.Text
-                    style={[
-                      styles.placeholder,
-                      {
-                        opacity: placeholderOpacity,
-                      },
-                    ]}
-                    pointerEvents="none"
-                  >
-                    Add a task
-                  </Animated.Text>
-                )}
-              </View>
+        <KeyboardAvoidingView style={styles.todoContainer} behavior="padding">
+          <View style={styles.centeredContent}>
+            <Text style={styles.message}>
+              Add all the things you've been meaning to do!
+            </Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                ref={inputRef}
+                maxLength={40}
+                returnKeyType="done"
+                onSubmitEditing={handleAddTodo}
+                onFocus={() => setIsInputFocused(true)}
+                onBlur={() => setIsInputFocused(false)}
+                blurOnSubmit={false}
+                placeholder={isInputFocused ? '' : ' '}
+                placeholderTextColor="rgba(255, 255, 255, 0.75)"
+                onChangeText={setNewTodo}
+                value={newTodo}
+                style={styles.textInput}
+              />
+              {!isInputFocused && !newTodo && (
+                <Animated.Text
+                  style={[
+                    styles.placeholder,
+                    {
+                      opacity: placeholderOpacity,
+                    },
+                  ]}
+                  pointerEvents="none"
+                >
+                  Add a task
+                </Animated.Text>
+              )}
+            </View>
 
-              {/* <TouchableWithoutFeedback
+            {/* <TouchableWithoutFeedback
               onPressIn={(event) => {
                 event.stopPropagation();
                 handleAddTodo();
               }}
             > */}
-              <View ref={addButtonRef} style={styles.buttonContainer}>
-                <TouchableOpacity onPress={handleAddTodo}>
-                  <Image
-                    source={require('./images/addButton.png')}
-                    style={{
-                      width: 40,
-                      height: 40,
-                      resizeMode: 'contain',
-                      tintColor: 'white',
-                      opacity: newTodo.length > 0 ? 1 : 0.7,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-              {/* </TouchableWithoutFeedback> */}
+            <View ref={addButtonRef} style={styles.buttonContainer}>
+              <TouchableOpacity onPress={handleAddTodo}>
+                <Image
+                  source={require('./images/addButton.png')}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    resizeMode: 'contain',
+                    tintColor: 'white',
+                    opacity: newTodo.length > 0 ? 1 : 0.7,
+                  }}
+                />
+              </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
-    </GestureRecognizer>
+            {/* </TouchableWithoutFeedback> */}
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
