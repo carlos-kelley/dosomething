@@ -7,7 +7,7 @@ import CompleteButton from './CompleteButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { Audio } from 'expo-av';
-import soundUrl0 from './sounds/Blow.mp3';
+import soundUrl0 from './sounds/congrats.mp3';
 import soundUrl1 from './sounds/Bottle.mp3';
 import Confetti from 'react-native-confetti';
 
@@ -82,13 +82,13 @@ function DailyTodo() {
     }
     loadSounds();
 
-    return () => {
-      sounds.forEach((sound) => {
-        if (sound) {
-          sound.unloadAsync();
-        }
-      });
-    };
+    // return () => {
+    //   sounds.forEach((sound) => {
+    //     if (sound) {
+    //       sound.unloadAsync();
+    //     }
+    //   });
+    // };
   }, []);
 
   useEffect(() => {
@@ -183,7 +183,13 @@ function DailyTodo() {
           {completed === true ? (
             <>
               <View style={styles.confettiContainer}>
-                <Confetti ref={confettiRef} />
+                <Confetti
+                  ref={confettiRef}
+                  // untilStopped={true}
+                  confettiCount={1500}
+                  duration={3000}
+                  timeout={0}
+                />
               </View>
               <View style={styles.todoWrapper}>
                 <Text style={styles.todo}>Congrats!</Text>
@@ -217,7 +223,7 @@ function DailyTodo() {
           )}
         </>
       ) : (
-        <Text>Null error.</Text>
+        <Text style={{ opacity: 0 }}>Null error.</Text>
       )}
     </>
   );

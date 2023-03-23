@@ -266,12 +266,6 @@ const NewTodo = () => {
               )}
             </View>
 
-            {/* <TouchableWithoutFeedback
-              onPressIn={(event) => {
-                event.stopPropagation();
-                handleAddTodo();
-              }}
-            > */}
             <View ref={addButtonRef} style={styles.buttonContainer}>
               <TouchableOpacity onPress={handleAddTodo}>
                 <Image
