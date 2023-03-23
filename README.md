@@ -4,13 +4,6 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![ProtonMail][protonmail-shield]][protonmail-url]
 
-## Built With
-
-- [![React Native][reactnative]][reactnative-url]
-- [![NPM][npm]][npm-url]
-- [![Expo][expo]][expo-url]
-
-A full list of dependencies can be found in `package.json`.
 
 # Do Something
 Simplified to do app - do something every day.
@@ -18,6 +11,14 @@ Simplified to do app - do something every day.
 Built in React Native. User can add anything they've been meaning to do to a list. Each day, the app will display one thing for them to do, and congratulate them when they check it off.
 
 See the [Issues](https://github.com/carlos-kelley/dosomething/issues) page for progress status.
+
+## Built With
+
+- [![React Native][reactnative]][reactnative-url]
+- [![NPM][npm]][npm-url]
+- [![Expo][expo]][expo-url]
+
+A full list of dependencies can be found in `package.json`.
 
 ## Prerequisites
 
