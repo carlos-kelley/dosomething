@@ -127,7 +127,10 @@ const NewTodo = () => {
   // This function adds the new todo to the list of todos
   const handleAddTodo = () => {
     logAsyncStorage();
-    playSound();
+    if (newTodo.trim() !== '') {
+      playSound();
+    }
+
     console.log('in handleAddTodo, newTodo: ', newTodo);
     if (newTodo.trim() !== '') {
       console.log('in handleAddTodo, todos is ', todos);
@@ -218,12 +221,12 @@ const NewTodo = () => {
                 }}
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={clearAsyncStorage}
               style={{ marginLeft: 200 }}
             >
               <Image source={require('./images/deleteButton.png')} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         {/* <Button
@@ -233,9 +236,7 @@ const NewTodo = () => {
         /> */}
         <KeyboardAvoidingView style={styles.todoContainer} behavior="padding">
           <View style={styles.centeredContent}>
-            <Text style={styles.message}>
-              Add all the things you've been meaning to do!
-            </Text>
+            <Text style={styles.message}>Add some things you wanna do!</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 ref={inputRef}
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     // paddingHorizontal: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
     // backgroundColor: 'gray',
   },
   buttonContainer: {

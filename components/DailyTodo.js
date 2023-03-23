@@ -186,9 +186,9 @@ function DailyTodo() {
         <View style={styles.todoWrapper}>
           <Text style={styles.todo}>Welcome!</Text>
           <Text style={styles.message}>Add a Todo on the Input page.</Text>
-          <View>
+          {/* <View>
             <Text>Index: {index}</Text>
-          </View>
+          </View> */}
         </View>
       ) : index !== null ? (
         <>
@@ -216,9 +216,9 @@ function DailyTodo() {
             <>
               <View style={styles.todoWrapper}>
                 <Text style={styles.todo}>{todos[index]}</Text>
-                <View>
+                {/* <View>
                   <Text>{index}</Text>
-                </View>
+                </View> */}
                 <View style={styles.buttonsContainer}>
                   <View style={styles.buttonWrapper}>
                     <DeleteButton
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     // paddingHorizontal: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
   },
   todo: {
     fontSize: 40,
