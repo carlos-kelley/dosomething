@@ -6,9 +6,12 @@ import DeleteButton from './DeleteButton';
 import CompleteButton from './CompleteButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
+import { Audio } from 'expo-av';
+import soundUrl from './sounds/Blow.mp3';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
+  const [sound, setSound] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
   const [index, setIndex] = useState(null);
@@ -47,6 +50,27 @@ function DailyTodo() {
     }
     fetchCompleted();
   });
+
+  // Add a useEffect for loading the sound
+  useEffect(() => {
+    async function loadSound() {
+      const soundObject = new Audio.Sound();
+      try {
+        await soundObject.loadAsync(soundUrl);
+        await soundObject.setVolumeAsync(0.25);
+        setSound(soundObject);
+      } catch (error) {
+        console.log('Error loading sound:', error);
+      }
+    }
+    loadSound();
+
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     console.log('in dailyTodo useEffect, todos: ', todos);
@@ -101,13 +125,22 @@ function DailyTodo() {
   };
 
   const handleCompleteTodoPress = async () => {
-    console.log('in handleCompleteTodoPress');
+    console.log('in handleCompleteTodoPress,  soundurl is: ', soundUrl);
     Haptics.notificationAsync(Haptics.ImpactFeedbackStyle.Success);
     handleDeleteTodo(index);
     setCompleted(true);
     console.log('completed: ', completed);
     await AsyncStorage.setItem('completed', 'true');
     logAsyncStorage();
+
+    // Play sound using expo-av
+    if (sound) {
+      try {
+        await sound.playAsync();
+      } catch (error) {
+        console.log('Error playing sound:', error);
+      }
+    }
   };
 
   // const logCompleted = () => {

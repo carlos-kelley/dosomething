@@ -113,8 +113,8 @@ const NewTodo = () => {
       console.log('newTodo is now ', newTodo);
       setIsAddTodoSuccess(true);
       setTimeout(() => setIsAddTodoSuccess(false), 1500);
-      // Set isAddTodoSuccess to false after 3 seconds
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      // play
     }
   };
 
@@ -197,12 +197,12 @@ const NewTodo = () => {
                   }}
                 />
               </TouchableOpacity>
-              {/* <TouchableOpacity
-              onPress={clearAsyncStorage}
-              style={{ marginLeft: 200 }}
-            >
-              <Image source={require('./images/deleteButton.png')} />
-            </TouchableOpacity> */}
+              <TouchableOpacity
+                onPress={clearAsyncStorage}
+                style={{ marginLeft: 200 }}
+              >
+                <Image source={require('./images/deleteButton.png')} />
+              </TouchableOpacity>
             </View>
           </View>
           {/* <Button
