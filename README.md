@@ -10,8 +10,6 @@ See the Issues page for progress status.
 Before you get started, make sure you have the following software installed on your computer/phone:
 
 - [Node.js](https://nodejs.org/en/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Nodemon](https://nodemon.io/)
 - [Expo Go](https://expo.dev/client)
 
 ## Installation
