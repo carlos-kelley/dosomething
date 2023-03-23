@@ -7,11 +7,13 @@ import CompleteButton from './CompleteButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { Audio } from 'expo-av';
-import soundUrl from './sounds/Blow.mp3';
+import soundUrl0 from './sounds/Blow.mp3';
+import soundUrl1 from './sounds/Bottle.mp3';
 
 // This component displays a random todo from the list of todos, once per day
 function DailyTodo() {
-  const [sound, setSound] = useState(null);
+  const soundUrls = [soundUrl0, soundUrl1];
+  const [sounds, setSounds] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [todos, setTodos, handleDeleteTodo] = useContext(TodosContext);
   const [index, setIndex] = useState(null);
@@ -53,22 +55,30 @@ function DailyTodo() {
 
   // Add a useEffect for loading the sound
   useEffect(() => {
-    async function loadSound() {
-      const soundObject = new Audio.Sound();
-      try {
-        await soundObject.loadAsync(soundUrl);
-        await soundObject.setVolumeAsync(0.25);
-        setSound(soundObject);
-      } catch (error) {
-        console.log('Error loading sound:', error);
-      }
+    async function loadSounds() {
+      const loadedSounds = await Promise.all(
+        soundUrls.map(async (url) => {
+          const soundObject = new Audio.Sound();
+          try {
+            await soundObject.loadAsync(url);
+            await soundObject.setVolumeAsync(0.25);
+            return soundObject;
+          } catch (error) {
+            console.log('Error loading sound:', error);
+            return null;
+          }
+        }),
+      );
+      setSounds(loadedSounds);
     }
-    loadSound();
+    loadSounds();
 
     return () => {
-      if (sound) {
-        sound.unloadAsync();
-      }
+      sounds.forEach((sound) => {
+        if (sound) {
+          sound.unloadAsync();
+        }
+      });
     };
   }, []);
 
@@ -113,7 +123,20 @@ function DailyTodo() {
     return () => clearInterval(intervalId);
   }, [todos]);
 
+  const playSoundByIndex = async (index) => {
+    const sound = sounds[index];
+    if (sound) {
+      try {
+        await sound.setPositionAsync(0); // Reset sound to start
+        await sound.playAsync();
+      } catch (error) {
+        console.log('Error playing sound:', error);
+      }
+    }
+  };
+
   const handleDeleteTodoPress = () => {
+    playSoundByIndex(1);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); // Trigger haptic feedback
     handleDeleteTodo(index);
     if (index === todos.length - 1) {
@@ -125,22 +148,13 @@ function DailyTodo() {
   };
 
   const handleCompleteTodoPress = async () => {
-    console.log('in handleCompleteTodoPress,  soundurl is: ', soundUrl);
+    playSoundByIndex(0);
     Haptics.notificationAsync(Haptics.ImpactFeedbackStyle.Success);
     handleDeleteTodo(index);
     setCompleted(true);
     console.log('completed: ', completed);
     await AsyncStorage.setItem('completed', 'true');
     logAsyncStorage();
-
-    // Play sound using expo-av
-    if (sound) {
-      try {
-        await sound.playAsync();
-      } catch (error) {
-        console.log('Error playing sound:', error);
-      }
-    }
   };
 
   // const logCompleted = () => {
